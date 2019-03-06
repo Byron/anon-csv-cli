@@ -72,7 +72,33 @@ pub enum FakerKind {
 
 impl FakerKind {
     pub fn fake(&self) -> Cow<str> {
-        "hello".into()
+        use self::FakerKind::*;
+        use fake::faker::*;
+        match self {
+            Name(minor) => {
+                use self::NameKind::*;
+                match minor {
+                    Name => <Faker as fake::faker::Name>::name().into(),
+                    LastName => Faker::last_name().into(),
+                    FirstName => Faker::first_name().into(),
+                }
+            }
+            Internet(minor) => {
+                use self::InternetKind::*;
+                match minor {
+                    SafeEmail => Faker::safe_email().into(),
+                }
+            }
+            Address(minor) => {
+                use self::AddressKind::*;
+                match minor {
+                    Zip => Faker::zip().into(),
+                    StreetName => Faker::street_name().into(),
+                    City => Faker::city().into(),
+                    StateAbbr => Faker::state_abbr().into(),
+                }
+            }
+        }
     }
 }
 
