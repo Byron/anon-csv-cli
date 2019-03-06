@@ -4,6 +4,9 @@ extern crate failure_tools;
 #[macro_use]
 extern crate structopt;
 extern crate fake;
+extern crate strum;
+#[macro_use]
+extern crate strum_macros;
 
 use failure::{Error, ResultExt};
 use failure_tools::ok_or_exit;

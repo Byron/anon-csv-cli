@@ -2,65 +2,27 @@ use failure::ResultExt;
 use std::borrow::Cow;
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Debug, EnumString)]
+#[strum(serialize_all = "snake_case")]
 pub enum InternetKind {
     SafeEmail,
 }
 
-impl FromStr for InternetKind {
-    type Err = failure::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use self::InternetKind::*;
-        Ok(match s.to_lowercase().as_str() {
-            "safe_email" | "safeemail" => SafeEmail,
-            _ => bail!("Unkown minor internet kind: '{}'", s),
-        })
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, EnumString)]
+#[strum(serialize_all = "snake_case")]
 pub enum NameKind {
     Name,
     FirstName,
     LastName,
 }
 
-impl FromStr for NameKind {
-    type Err = failure::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use self::NameKind::*;
-        Ok(match s.to_lowercase().as_str() {
-            "name" => Name,
-            "first_name" => FirstName,
-            "last_name" => LastName,
-            _ => bail!("Unknown minor name kind: '{}'", s),
-        })
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, EnumString)]
+#[strum(serialize_all = "snake_case")]
 pub enum AddressKind {
     Zip,
     StreetName,
     City,
     StateAbbr,
-}
-
-impl FromStr for AddressKind {
-    type Err = failure::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use self::AddressKind::*;
-        Ok(match s.to_lowercase().as_str() {
-            "zip" => Zip,
-            "street_name" | "streetname" => StreetName,
-            "city" => City,
-            "state_abbr" | "stateabbr" => StateAbbr,
-            _ => bail!("Unknown minor address kind: '{}'", s),
-        })
-    }
 }
 
 #[derive(Debug)]
