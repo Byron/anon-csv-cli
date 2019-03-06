@@ -5,6 +5,7 @@ pub mod spec;
 mod anon {
     use crate::soon_to_be_lib::spec::Spec;
     use csv::ReaderBuilder;
+    use csv::StringRecord;
     use csv::WriterBuilder;
     use std::io::Read;
     use std::io::Write;
@@ -21,7 +22,10 @@ mod anon {
         specs: &[Spec],
         output: impl Write,
     ) -> Result<RewriteInfo, failure::Error> {
-        let mut csv = ReaderBuilder::new().delimiter(delimiter).from_reader(input);
+        let mut csv = ReaderBuilder::new()
+            .has_headers(false)
+            .delimiter(delimiter)
+            .from_reader(input);
         let mut out_csv = WriterBuilder::new()
             .delimiter(delimiter)
             .from_writer(output);
@@ -29,6 +33,14 @@ mod anon {
         for record in csv.records() {
             let record = record?;
             info.rows += 1;
+            let mut anon_record =
+                StringRecord::with_capacity(record.as_slice().as_bytes().len(), record.len());
+            let mut last_cell: Option<usize> = None;
+            let push_fields = |target: &mut StringRecord, from: Option<usize>, to| {
+                for index in (from.map(|index| index + 1).unwrap_or(0))..to {
+                    target.push_field(&record[index])
+                }
+            };
             for spec in specs {
                 info.cells += 1;
                 let cell = record.get(spec.column).ok_or_else(|| {
@@ -38,8 +50,12 @@ mod anon {
                         record.len()
                     )
                 })?;
+                push_fields(&mut anon_record, last_cell, spec.column);
+                anon_record.push_field(&spec.kind.fake());
+                last_cell = Some(spec.column);
             }
-            out_csv.write_record(&record)?;
+            push_fields(&mut anon_record, last_cell, record.len());
+            out_csv.write_record(&anon_record)?;
         }
         Ok(info)
     }

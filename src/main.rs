@@ -21,7 +21,9 @@ fn run() -> Result<(), Error> {
     let info =
         soon_to_be_lib::anonymise(reader, opt.delimiter as u32 as u8, &opt.specs, stdout_lock)
             .with_context(|_| format!("Anonymisation failed"))?;
-    eprintln!("{:?}", info);
+    if !opt.quiet {
+        eprintln!("{:?}", info);
+    }
     Ok(())
 }
 
