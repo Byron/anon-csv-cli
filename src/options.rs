@@ -15,7 +15,7 @@ pub struct Args {
     #[structopt(short = "q", long = "quiet")]
     pub quiet: bool,
     /// If set, the CSV file is expected to have one header line. It will be reproduced in the output
-    #[structopt(short = "h", long = "header")]
+    #[structopt(long = "header")]
     pub header: bool,
     /// The delimiter of the input CSV file. The same delimiter will be used for output.
     #[structopt(short = "d", long = "delimiter", default_value = ",")]

@@ -2,7 +2,7 @@
 name = "anon-csv-cli"
 version = "1.0.0"
 authors = ["Sebastian Thiel <byronimo@gmail.com>"]
-publish = false
+publish = true
 edition = "2018"
 
 [dependencies]
