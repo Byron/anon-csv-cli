@@ -1,6 +1,8 @@
-error: Found argument '--all-sfoo
-
-USAGE:
-    anon-csv-cli [FLAGS] [OPTIONS] <csv_file> [specs]...
-
-For more information try --help
+Name.name
+Name.first_name
+Name.last_name
+Address.zip
+Address.street_name
+Address.city
+Address.state_abbr
+Internet.safe_email

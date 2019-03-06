@@ -16,18 +16,12 @@ use structopt::StructOpt;
 mod options;
 mod soon_to_be_lib;
 
-fn print_specs() {
-    use soon_to_be_lib::spec::FakerKind;
-    use strum::IntoEnumIterator;
-    for major in FakerKind::iter() {
-        eprintln!("{:?}", major);
-    }
-}
+use soon_to_be_lib::spec::FakerKind;
 
 fn run() -> Result<(), Error> {
     let opt: options::Args = options::Args::from_args();
     if opt.print_specs {
-        print_specs();
+        FakerKind::eprint_combinations();
         return Ok(());
     }
     let reader = File::open(&opt.csv_file)

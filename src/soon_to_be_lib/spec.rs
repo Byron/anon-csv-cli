@@ -1,20 +1,15 @@
 use failure::ResultExt;
 use std::borrow::Cow;
 use std::str::FromStr;
+use strum::IntoEnumIterator;
 
-#[derive(Debug, EnumString)]
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum InternetKind {
     SafeEmail,
 }
 
-impl Default for InternetKind {
-    fn default() -> Self {
-        InternetKind::SafeEmail
-    }
-}
-
-#[derive(Debug, EnumString)]
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum NameKind {
     Name,
@@ -22,13 +17,7 @@ pub enum NameKind {
     LastName,
 }
 
-impl Default for NameKind {
-    fn default() -> Self {
-        NameKind::Name
-    }
-}
-
-#[derive(Debug, EnumString)]
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum AddressKind {
     Zip,
@@ -37,13 +26,7 @@ pub enum AddressKind {
     StateAbbr,
 }
 
-impl Default for AddressKind {
-    fn default() -> Self {
-        AddressKind::City
-    }
-}
-
-#[derive(Debug, EnumIter)]
+#[derive(Debug)]
 pub enum FakerKind {
     Internet(InternetKind),
     Name(NameKind),
@@ -68,7 +51,34 @@ impl FromStr for FakerKind {
     }
 }
 
+impl AsRef<str> for FakerKind {
+    fn as_ref(&self) -> &'static str {
+        use self::FakerKind::*;
+        match self {
+            Address(_) => "Address",
+            Internet(_) => "Internet",
+            Name(_) => "Name",
+        }
+    }
+}
+
 impl FakerKind {
+    pub fn eprint_combinations() {
+        fn eprint_major_minor<E, I>(major: &str)
+        where
+            E: IntoEnumIterator<Iterator = I> + Into<&'static str>,
+            I: Iterator<Item = E>,
+        {
+            for item in E::iter() {
+                eprintln!("{}.{}", major, item.into())
+            }
+        }
+        eprint_major_minor::<NameKind, _>(FakerKind::Name(NameKind::Name).as_ref());
+        eprint_major_minor::<AddressKind, _>(FakerKind::Address(AddressKind::City).as_ref());
+        eprint_major_minor::<InternetKind, _>(
+            FakerKind::Internet(InternetKind::SafeEmail).as_ref(),
+        );
+    }
     pub fn fake(&self) -> Cow<str> {
         use self::FakerKind::*;
         use fake::faker::*;

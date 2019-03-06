@@ -25,7 +25,7 @@ function tabular() {
 (with "the --all-specs argument"
   it "succeeds and prints all available faker specifications" && {
     WITH_SNAPSHOT="$snapshot/success-all-specs" \
-    expect_run ${WITH_FAILURE} "$exe" --all-specs foo
+    expect_run ${SUCCESSFULLY} "$exe" --all-specs foo
   }
 )
 (with "a valid input"
