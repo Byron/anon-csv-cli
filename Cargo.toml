@@ -4,6 +4,12 @@ version = "1.0.0"
 authors = ["Sebastian Thiel <byronimo@gmail.com>"]
 publish = true
 edition = "2018"
+documentation = "https://github.com/Byron-TW/anon-csv-cli"
+repository = "https://github.com/Byron-TW/anon-csv-cli"
+description = "A tool to anonymise CSV files, providing various options to substitute real data with plausable fake data."
+categories = ["Text processing", "science"]
+keywords = ["csv", "anon", "anonymization"]
+license = "MIT"
 
 [dependencies]
 failure = "0.1.1"
