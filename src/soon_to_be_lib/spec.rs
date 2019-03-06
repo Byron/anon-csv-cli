@@ -6,24 +6,52 @@ use strum::IntoEnumIterator;
 #[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum InternetKind {
+    FreeEmailProvider,
+    DomainSuffix,
+    UserName,
+    FreeEmail,
     SafeEmail,
+    Password,
+    Ip,
+    Ipv4,
+    Ipv6,
+    Color,
+    UserAgent,
 }
 
 #[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum NameKind {
-    Name,
     FirstName,
     LastName,
+    Prefix,
+    Suffix,
+    Name,
+    NameWithMiddle,
+    TitleDescriptor,
+    TitleLevel,
+    TitleJob,
+    Title,
 }
 
 #[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
 #[strum(serialize_all = "snake_case")]
 pub enum AddressKind {
-    Zip,
-    StreetName,
-    City,
+    TimeZone,
+    CityPrefix,
+    CitySuffix,
+    StreetSuffix,
+    State,
     StateAbbr,
+    City,
+    StreetName,
+    BuildingNumber,
+    StreetAddress,
+    SecondaryAddress,
+    Zip,
+    Postcode,
+    Latitude,
+    Longitude,
 }
 
 #[derive(Debug)]
@@ -72,6 +100,7 @@ impl FakerKind {
             for item in E::iter() {
                 eprintln!("{}.{}", major, item.into())
             }
+            eprintln!();
         }
         eprint_major_minor::<NameKind, _>(FakerKind::Name(NameKind::Name).as_ref());
         eprint_major_minor::<AddressKind, _>(FakerKind::Address(AddressKind::City).as_ref());
@@ -89,21 +118,49 @@ impl FakerKind {
                     Name => <Faker as fake::faker::Name>::name().into(),
                     LastName => Faker::last_name().into(),
                     FirstName => Faker::first_name().into(),
+                    NameWithMiddle => Faker::name_with_middle().into(),
+                    Prefix => Faker::prefix().into(),
+                    Suffix => <Faker as fake::faker::Name>::suffix().into(),
+                    TitleDescriptor => Faker::title_descriptor().into(),
+                    TitleLevel => Faker::title_level().into(),
+                    TitleJob => Faker::title_job().into(),
+                    Title => Faker::title().into(),
                 }
             }
             Internet(minor) => {
                 use self::InternetKind::*;
                 match minor {
+                    FreeEmailProvider => Faker::free_email_provider().into(),
+                    DomainSuffix => Faker::domain_suffix().into(),
+                    UserName => Faker::user_name().into(),
+                    FreeEmail => Faker::free_email().into(),
                     SafeEmail => Faker::safe_email().into(),
+                    Password => Faker::password(4, 6).into(),
+                    Ip => Faker::ip().into(),
+                    Ipv4 => Faker::ipv4().into(),
+                    Ipv6 => Faker::ipv6().into(),
+                    Color => Faker::color().into(),
+                    UserAgent => Faker::user_agent().into(),
                 }
             }
             Address(minor) => {
                 use self::AddressKind::*;
                 match minor {
-                    Zip => Faker::zip().into(),
-                    StreetName => Faker::street_name().into(),
-                    City => Faker::city().into(),
+                    TimeZone => Faker::time_zone().into(),
+                    CityPrefix => Faker::city_prefix().into(),
+                    CitySuffix => Faker::city_suffix().into(),
+                    StreetSuffix => Faker::street_suffix().into(),
+                    State => Faker::state().into(),
                     StateAbbr => Faker::state_abbr().into(),
+                    City => Faker::city().into(),
+                    StreetName => Faker::street_name().into(),
+                    BuildingNumber => Faker::building_number().into(),
+                    StreetAddress => Faker::street_address().into(),
+                    SecondaryAddress => Faker::secondary_address().into(),
+                    Zip => Faker::zip().into(),
+                    Postcode => Faker::postcode().into(),
+                    Latitude => Faker::latitude().into(),
+                    Longitude => Faker::longitude().into(),
                 }
             }
         }
