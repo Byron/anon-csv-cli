@@ -20,7 +20,7 @@ pub struct Args {
     /// The delimiter of the input CSV file. The same delimiter will be used for output.
     #[structopt(short = "d", long = "delimiter", default_value = ",")]
     pub delimiter: char,
-    /// The path to the CSV file to use as input
+    /// The path to the CSV file to use as input. If '-', the file will be read from stdin.
     #[structopt(parse(from_os_str))]
     pub csv_file: PathBuf,
     /// One or more rewrite specifications. They look like '<column>:<type>', where <column> is

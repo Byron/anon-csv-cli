@@ -28,6 +28,14 @@ function tabular() {
     expect_run ${SUCCESSFULLY} "$exe" --all-specs foo
   }
 )
+(with "a valid input from stdin"
+  (with "no column"
+    it "succeeds" && {
+      WITH_SNAPSHOT="$snapshot/success-noop-from-stdin" \
+      expect_run ${SUCCESSFULLY} "$exe" -q --header - < "$fixtures/addresses-privatized-with-header.csv"
+    }
+  )
+)
 (with "a valid input"
   (with "header"
     (with "all columns"
