@@ -29,6 +29,14 @@ function tabular() {
   }
 )
 (with "a valid input"
+  (with "header"
+    (with "all columns"
+      it "succeeds and removes all private data with plausible fake data, but keeps the header" && {
+        WITH_SNAPSHOT="$snapshot/success-no-private-data-with-header" \
+        expect_run_sh ${SUCCESSFULLY} "$exe -q --header $fixtures/addresses-privatized-with-header.csv 0:name.first_name 1:name.last_name 2:address.street_name 3:address.city 4:address.state_abbr 5:address.zip | grep private"
+      }
+    )
+  )
   (with "no header"
     (with "and a duplicate spec"
       it "fails with a decent error message" && {
@@ -68,7 +76,7 @@ function tabular() {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 5:address.zip
         }
       )
-      (with "the last column"
+      (with "all columns"
         it "succeeds and removes all private data with plausible fake data" && {
           WITH_SNAPSHOT="$snapshot/success-no-private-data" \
           expect_run_sh ${SUCCESSFULLY} "$exe -q $fixtures/addresses-privatized.csv 0:name.first_name 1:name.last_name 2:address.street_name 3:address.city 4:address.state_abbr 5:address.zip | grep private || :"

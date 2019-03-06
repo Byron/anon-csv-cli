@@ -33,15 +33,17 @@ fn validated(specs: &[Spec]) -> Result<&[Spec], failure::Error> {
 pub fn anonymise(
     input: impl Read,
     delimiter: u8,
+    has_header: bool,
     specs: &[Spec],
     output: impl Write,
 ) -> Result<RewriteInfo, failure::Error> {
     let specs = validated(specs)?;
     let mut csv = ReaderBuilder::new()
-        .has_headers(false)
+        .has_headers(has_header)
         .delimiter(delimiter)
         .from_reader(input);
     let mut out_csv = WriterBuilder::new()
+        .has_headers(has_header)
         .delimiter(delimiter)
         .from_writer(output);
     let mut info = RewriteInfo::default();
@@ -50,6 +52,9 @@ pub fn anonymise(
         Entry::Occupied(v) => v.get().to_owned(),
         Entry::Vacant(e) => e.insert(spec.kind.fake().into_owned()).to_owned(),
     };
+    if has_header {
+        out_csv.write_record(csv.headers()?)?;
+    }
     for record in csv.records() {
         let record = record?;
         info.rows += 1;

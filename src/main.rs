@@ -28,9 +28,14 @@ fn run() -> Result<(), Error> {
         .with_context(|_| format!("Could not open '{}' for reading", opt.csv_file.display()))?;
     let stdout = stdout();
     let stdout_lock = stdout.lock();
-    let info =
-        soon_to_be_lib::anonymise(reader, opt.delimiter as u32 as u8, &opt.specs, stdout_lock)
-            .with_context(|_| format!("Anonymisation failed"))?;
+    let info = soon_to_be_lib::anonymise(
+        reader,
+        opt.delimiter as u32 as u8,
+        opt.header,
+        &opt.specs,
+        stdout_lock,
+    )
+    .with_context(|_| format!("Anonymisation failed"))?;
     if !opt.quiet {
         eprintln!("{:?}", info);
     }
