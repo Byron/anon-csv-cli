@@ -1,0 +1,7 @@
+error: The following required arguments were not provided:
+    <csv_file>
+
+USAGE:
+    anon-csv-cli <csv_file> --delimiter <delimiter>
+
+For more information try --help

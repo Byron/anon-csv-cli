@@ -1,38 +1,28 @@
+#[macro_use]
 extern crate failure;
 extern crate failure_tools;
-extern crate anon_csv_cli;
 #[macro_use]
 extern crate structopt;
 
-use failure::Error;
+use failure::{Error, ResultExt};
 use failure_tools::ok_or_exit;
+use std::{fs::File, io::stdout};
 use structopt::StructOpt;
 
-mod options {
-    use std::path::PathBuf;
-
-    #[derive(Debug, StructOpt)]
-    #[structopt(name = "example", about = "An example of StructOpt usage.")]
-    pub struct Args {
-        /// Activate debug mode
-        #[structopt(short = "d", long = "debug")]
-        debug: bool,
-        /// Set speed
-        #[structopt(short = "s", long = "speed", default_value = "42")]
-        speed: f64,
-        /// Input file
-        #[structopt(parse(from_os_str))]
-        input: PathBuf,
-        /// Output file, stdout if not present
-        #[structopt(parse(from_os_str))]
-        output: Option<PathBuf>,
-    }
-}
+mod options;
+mod soon_to_be_lib;
 
 fn run() -> Result<(), Error> {
-    let opt = options::Args::from_args();
-    println!("{:?}", opt);
-    anon_csv_cli::fun()
+    let opt: options::Args = options::Args::from_args();
+    let reader = File::open(&opt.csv_file)
+        .with_context(|_| format!("Could not open '{}' for reading", opt.csv_file.display()))?;
+    let stdout = stdout();
+    let stdout_lock = stdout.lock();
+    let info =
+        soon_to_be_lib::anonymise(reader, opt.delimiter as u32 as u8, &opt.specs, stdout_lock)
+            .with_context(|_| format!("Anonymisation failed"))?;
+    eprintln!("{:?}", info);
+    Ok(())
 }
 
 fn main() {

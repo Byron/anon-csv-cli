@@ -7,19 +7,20 @@ root="$(cd "${0%/*}" && pwd)"
 # shellcheck disable=1090
 source "$root/utilities.sh"
 snapshot="$root/snapshots"
+fixtures="$root/fixtures"
 
 SUCCESSFULLY=0
 WITH_FAILURE=1
 
-(with "no input file"
+(with "not enough arguments"
   it "fails with an error message" && {
-    WITH_SNAPSHOT="$snapshot/failure-missing-input-file" \
+    WITH_SNAPSHOT="$snapshot/failure-missing-arguments" \
     expect_run ${WITH_FAILURE} "$exe"
   }
 )
-(with "a valid input file"
-  it "produces the expected output" && {
-    WITH_SNAPSHOT="$snapshot/success-input-file-produces-correct-output" \
-    expect_run ${SUCCESSFULLY} "$exe" <(echo this is probably not what you want)
+(with "a valid input and a rewrite spec being out of range"
+  it "fails with a decent error message" && {
+    WITH_SNAPSHOT="$snapshot/failure-input-file-column-out-of-range" \
+    expect_run ${WITH_FAILURE} "$exe" "$fixtures/addresses.csv" 8:Internet.safe_email
   }
 )
