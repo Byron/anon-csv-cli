@@ -54,11 +54,46 @@ pub enum AddressKind {
     Longitude,
 }
 
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
+#[strum(serialize_all = "snake_case")]
+pub enum CompanyKind {
+    Suffix,
+    Name,
+    Buzzword,
+    CatchPhrase,
+    Bs,
+    Profession,
+    Industry,
+}
+
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
+#[strum(serialize_all = "snake_case")]
+pub enum LoremKind {
+    Word,
+    Words,
+    Sentence,
+    Sentences,
+    Paragraph,
+    Paragraphs,
+}
+
+#[derive(Debug, EnumString, EnumIter, IntoStaticStr)]
+#[strum(serialize_all = "snake_case")]
+pub enum NumberKind {
+    PhoneNumber,
+    CellNumber,
+    Digit,
+}
+
 #[derive(Debug)]
 pub enum FakerKind {
+    Address(AddressKind),
+    Boolean,
+    Company(CompanyKind),
+    Lorem(LoremKind),
+    Number(NumberKind),
     Internet(InternetKind),
     Name(NameKind),
-    Address(AddressKind),
 }
 
 impl FromStr for FakerKind {
@@ -72,6 +107,10 @@ impl FromStr for FakerKind {
                 "internet" => Internet(minor.parse()?),
                 "name" => Name(minor.parse()?),
                 "address" => Address(minor.parse()?),
+                "boolean" => Boolean,
+                "company" => Company(minor.parse()?),
+                "lorem" => Lorem(minor.parse()?),
+                "number" => Number(minor.parse()?),
                 _ => bail!("Unknown major faker kind: '{}'", major),
             },
             _ => bail!("Invalid faker kind: '{}'", s),
@@ -83,9 +122,13 @@ impl AsRef<str> for FakerKind {
     fn as_ref(&self) -> &'static str {
         use self::FakerKind::*;
         match self {
+            Boolean => "Boolean.simple",
             Address(_) => "Address",
+            Company(_) => "Company",
             Internet(_) => "Internet",
             Name(_) => "Name",
+            Lorem(_) => "Lorem",
+            Number(_) => "Number",
         }
     }
 }
@@ -104,14 +147,51 @@ impl FakerKind {
         }
         eprint_major_minor::<NameKind, _>(FakerKind::Name(NameKind::Name).as_ref());
         eprint_major_minor::<AddressKind, _>(FakerKind::Address(AddressKind::City).as_ref());
+        eprint_major_minor::<CompanyKind, _>(FakerKind::Company(CompanyKind::Name).as_ref());
+        eprint_major_minor::<LoremKind, _>(FakerKind::Lorem(LoremKind::Word).as_ref());
+        eprint_major_minor::<NumberKind, _>(FakerKind::Number(NumberKind::Digit).as_ref());
         eprint_major_minor::<InternetKind, _>(
             FakerKind::Internet(InternetKind::SafeEmail).as_ref(),
         );
+
+        eprintln!("{}", FakerKind::Boolean.as_ref())
     }
     pub fn fake(&self) -> Cow<str> {
         use self::FakerKind::*;
         use fake::faker::*;
         match self {
+            Number(minor) => {
+                use self::NumberKind::*;
+                match minor {
+                    Digit => Faker::digit().into(),
+                    CellNumber => Faker::cell_number().into(),
+                    PhoneNumber => Faker::phone_number().into(),
+                }
+            }
+            Lorem(minor) => {
+                use self::LoremKind::*;
+                match minor {
+                    Word => Faker::word().into(),
+                    Words => Faker::words(10).join(" ").into(),
+                    Sentence => Faker::sentence(10, 15).into(),
+                    Sentences => Faker::sentences(5).join("\n").into(),
+                    Paragraph => Faker::paragraph(10, 15).into(),
+                    Paragraphs => Faker::paragraphs(5).join("\n").into(),
+                }
+            }
+            Company(minor) => {
+                use self::CompanyKind::*;
+                match minor {
+                    Suffix => <Faker as fake::faker::Company>::suffix().into(),
+                    Name => <Faker as fake::faker::Company>::name().into(),
+                    Buzzword => Faker::buzzword().into(),
+                    CatchPhrase => Faker::catch_phase().into(),
+                    Bs => Faker::bs().into(),
+                    Profession => Faker::profession().into(),
+                    Industry => Faker::industry().into(),
+                }
+            }
+            Boolean => if Faker::boolean() { "true" } else { "false" }.into(),
             Name(minor) => {
                 use self::NameKind::*;
                 match minor {

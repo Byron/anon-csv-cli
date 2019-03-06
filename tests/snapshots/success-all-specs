@@ -25,6 +25,25 @@ Address.postcode
 Address.latitude
 Address.longitude
 
+Company.suffix
+Company.name
+Company.buzzword
+Company.catch_phrase
+Company.bs
+Company.profession
+Company.industry
+
+Lorem.word
+Lorem.words
+Lorem.sentence
+Lorem.sentences
+Lorem.paragraph
+Lorem.paragraphs
+
+Number.phone_number
+Number.cell_number
+Number.digit
+
 Internet.free_email_provider
 Internet.domain_suffix
 Internet.user_name
@@ -36,3 +55,5 @@ Internet.ipv4
 Internet.ipv6
 Internet.color
 Internet.user_agent
+
+Boolean.simple
