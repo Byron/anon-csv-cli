@@ -8,12 +8,24 @@ pub enum InternetKind {
     SafeEmail,
 }
 
+impl Default for InternetKind {
+    fn default() -> Self {
+        InternetKind::SafeEmail
+    }
+}
+
 #[derive(Debug, EnumString)]
 #[strum(serialize_all = "snake_case")]
 pub enum NameKind {
     Name,
     FirstName,
     LastName,
+}
+
+impl Default for NameKind {
+    fn default() -> Self {
+        NameKind::Name
+    }
 }
 
 #[derive(Debug, EnumString)]
@@ -25,11 +37,35 @@ pub enum AddressKind {
     StateAbbr,
 }
 
-#[derive(Debug)]
+impl Default for AddressKind {
+    fn default() -> Self {
+        AddressKind::City
+    }
+}
+
+#[derive(Debug, EnumIter)]
 pub enum FakerKind {
     Internet(InternetKind),
     Name(NameKind),
     Address(AddressKind),
+}
+
+impl FromStr for FakerKind {
+    type Err = failure::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use self::FakerKind::*;
+        let mut tokens = s.split('.');
+        Ok(match (tokens.next(), tokens.next()) {
+            (Some(major), Some(minor)) => match major.to_lowercase().as_str() {
+                "internet" => Internet(minor.parse()?),
+                "name" => Name(minor.parse()?),
+                "address" => Address(minor.parse()?),
+                _ => bail!("Unknown major faker kind: '{}'", major),
+            },
+            _ => bail!("Invalid faker kind: '{}'", s),
+        })
+    }
 }
 
 impl FakerKind {
@@ -61,24 +97,6 @@ impl FakerKind {
                 }
             }
         }
-    }
-}
-
-impl FromStr for FakerKind {
-    type Err = failure::Error;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        use self::FakerKind::*;
-        let mut tokens = s.split('.');
-        Ok(match (tokens.next(), tokens.next()) {
-            (Some(major), Some(minor)) => match major.to_lowercase().as_str() {
-                "internet" => Internet(minor.parse()?),
-                "name" => Name(minor.parse()?),
-                "address" => Address(minor.parse()?),
-                _ => bail!("Unknown major faker kind: '{}'", major),
-            },
-            _ => bail!("Invalid faker kind: '{}'", s),
-        })
     }
 }
 

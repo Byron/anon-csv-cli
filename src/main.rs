@@ -16,8 +16,20 @@ use structopt::StructOpt;
 mod options;
 mod soon_to_be_lib;
 
+fn print_specs() {
+    use soon_to_be_lib::spec::FakerKind;
+    use strum::IntoEnumIterator;
+    for major in FakerKind::iter() {
+        eprintln!("{:?}", major);
+    }
+}
+
 fn run() -> Result<(), Error> {
     let opt: options::Args = options::Args::from_args();
+    if opt.print_specs {
+        print_specs();
+        return Ok(());
+    }
     let reader = File::open(&opt.csv_file)
         .with_context(|_| format!("Could not open '{}' for reading", opt.csv_file.display()))?;
     let stdout = stdout();

@@ -8,6 +8,9 @@ fn parse_spec(src: &str) -> Result<Spec, failure::Error> {
 #[derive(Debug, StructOpt)]
 #[structopt(name = "anon-csv", about = "A CSV-file anonymizer")]
 pub struct Args {
+    /// If set, print all available faker specifications and exit
+    #[structopt(long = "all-specs")]
+    pub print_specs: bool,
     /// If set, no additional output will be produced on stderr
     #[structopt(short = "q", long = "quiet")]
     pub quiet: bool,
@@ -19,8 +22,7 @@ pub struct Args {
     pub csv_file: PathBuf,
     /// One or more rewrite specifications. They look like '<column>:<type>', where <column> is
     /// a zero-based column indexed, separated from the <type> being the type of data to fake.
-    /// Valid types are Internet.safe_email, Name.name, Name.first_name, Name.last_name
-    /// Address.zip
+    /// Run this command with --all-specs to learn about all possible values.
     #[structopt(parse(try_from_str = "parse_spec"))]
     pub specs: Vec<Spec>,
 }
