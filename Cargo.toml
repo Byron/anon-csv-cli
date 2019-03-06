@@ -15,7 +15,7 @@ strum = "0.14.0"
 strum_macros = "0.14.0"
 
 [[bin]]
-name="anon-csv-cli"
+name="anon-csv"
 path="src/main.rs"
 
 [profile.release]

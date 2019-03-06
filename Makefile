@@ -17,23 +17,23 @@ interactive-developer-environment-in-docker:
 	docker build -t $(docker_image) - < etc/developer.Dockerfile
 	docker run -v $$PWD:/volume -w /volume -it $(docker_image)
 
-target/debug/anon-csv-cli: always
+target/debug/anon-csv: always
 	cargo build
 
-target/release/anon-csv-cli: always
+target/release/anon-csv: always
 	cargo build --release
 
 lint:
 	cargo clippy
 
-profile: target/release/anon-csv-cli
+profile: target/release/anon-csv
 	valgrind --callgrind-out-file=callgrind.profile --tool=callgrind  $< >/dev/null
 	callgrind_annotate --auto=yes callgrind.profile
 
-benchmark: target/release/anon-csv-cli
+benchmark: target/release/anon-csv
 	hyperfine '$<'
 
-journey-tests: target/debug/anon-csv-cli
+journey-tests: target/debug/anon-csv
 	./tests/stateless-journey.sh $<
 
 continuous-journey-tests:
