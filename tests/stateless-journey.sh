@@ -30,6 +30,12 @@ function tabular() {
 )
 (with "a valid input"
   (with "no header"
+    (with "and a duplicate spec"
+      it "fails with a decent error message" && {
+        WITH_SNAPSHOT="$snapshot/failure-duplicate-spec" \
+        expect_run ${WITH_FAILURE} "$exe" "$fixtures/addresses.csv" 0:Internet.safe_email 0:Internet.safe_email
+      }
+    )
     (with "and a rewrite spec being out of range"
       it "fails with a decent error message" && {
         WITH_SNAPSHOT="$snapshot/failure-column-out-of-range" \
@@ -38,38 +44,34 @@ function tabular() {
     )
     (with "a rewrite spec being in range"
       (with "two non-consecutive columns"
-        it "succeeds and rewrites the output" && {
-          WITH_SNAPSHOT="$snapshot/success-column-in-range-two-non-consecutive-columns" \
-          SNAPSHOT_FILTER=tabular \
+        it "succeeds" && {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 2:address.street_name 4:address.state_abbr
         }
       )
       (with "two consecutive columns"
-        it "succeeds and rewrites the output" && {
-          WITH_SNAPSHOT="$snapshot/success-column-in-range-to-consecutive-columns" \
-          SNAPSHOT_FILTER=tabular \
+        it "succeeds" && {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 2:address.street_name 3:address.city
         }
       )
       (with "the center column"
-        it "succeeds and rewrites the output" && {
-          WITH_SNAPSHOT="$snapshot/success-column-in-range-center-column" \
-          SNAPSHOT_FILTER=tabular \
+        it "succeeds" && {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 2:address.street_name
         }
       )
       (with "the first column"
-        it "succeeds and rewrites the output" && {
-          WITH_SNAPSHOT="$snapshot/success-column-in-range-first-column" \
-          SNAPSHOT_FILTER=tabular \
+        it "succeeds" && {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 0:name.name
         }
       )
       (with "the last column"
-        it "succeeds and rewrites the output" && {
-          WITH_SNAPSHOT="$snapshot/success-column-in-range-last-column" \
-          SNAPSHOT_FILTER=tabular \
+        it "succeeds" && {
           expect_run ${SUCCESSFULLY} "$exe" -q "$fixtures/addresses.csv" 5:address.zip
+        }
+      )
+      (with "the last column"
+        it "succeeds and removes all private data with plausible fake data" && {
+          WITH_SNAPSHOT="$snapshot/success-no-private-data" \
+          expect_run_sh ${SUCCESSFULLY} "$exe -q $fixtures/addresses-privatized.csv 0:name.first_name 1:name.last_name 2:address.street_name 3:address.city 4:address.state_abbr 5:address.zip | grep private || :"
         }
       )
     )
