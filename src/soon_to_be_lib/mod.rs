@@ -7,6 +7,8 @@ mod anon {
     use csv::ReaderBuilder;
     use csv::StringRecord;
     use csv::WriterBuilder;
+    use std::collections::btree_map::Entry;
+    use std::collections::BTreeMap;
     use std::io::Read;
     use std::io::Write;
 
@@ -30,6 +32,11 @@ mod anon {
             .delimiter(delimiter)
             .from_writer(output);
         let mut info = RewriteInfo::default();
+        let mut memo = BTreeMap::<String, String>::new();
+        let mut memoized = |cell: &str, spec: &Spec| match memo.entry(cell.to_owned()) {
+            Entry::Occupied(v) => v.get().to_owned(),
+            Entry::Vacant(e) => e.insert(spec.kind.fake().into_owned()).to_owned(),
+        };
         for record in csv.records() {
             let record = record?;
             info.rows += 1;
@@ -51,7 +58,7 @@ mod anon {
                     )
                 })?;
                 push_fields(&mut anon_record, last_cell, spec.column);
-                anon_record.push_field(&spec.kind.fake());
+                anon_record.push_field(&memoized(cell, spec));
                 last_cell = Some(spec.column);
             }
             push_fields(&mut anon_record, last_cell, record.len());
