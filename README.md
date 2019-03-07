@@ -2,7 +2,7 @@ A tool to anonymise CSV files, providing various options to substitute real data
 
 ## Installation
 
-Using Cargo (which you can install with https://rustup.rs):
+Using Cargo (which you can install via https://rustup.rs):
 
 ```
 cargo install anon-csv-cli
@@ -16,7 +16,7 @@ anon-csv ./addresses.csv  0:name.first_name 1:name.last_name 2:address.street_na
 ```
 
 Use the `--header` flag to ignore the first line, usually the header, and the `--delimiter <other delimiter>` flag
-to use a different delimiter.
+to use a different field delimiter. The latter defaults to `,`.
 
 ## Works well with XSV
 
@@ -27,6 +27,8 @@ https://github.com/BurntSushi/xsv
 
 
 ## Available fake data types
+
+The fake data is provided by the [`fake`](https://docs.rs/crate/fake) crate.
 
 ```
 Name.first_name
