@@ -1,12 +1,9 @@
 use crate::soon_to_be_lib::spec::Spec;
-use csv::ReaderBuilder;
-use csv::StringRecord;
-use csv::WriterBuilder;
-use std::collections::btree_map::Entry;
-use std::collections::BTreeMap;
-use std::collections::BTreeSet;
-use std::io::Read;
-use std::io::Write;
+use csv::{ReaderBuilder, StringRecord, WriterBuilder};
+use std::{
+    collections::btree_map::Entry, collections::BTreeMap, collections::BTreeSet, io::Read,
+    io::Write,
+};
 
 #[derive(Debug, Default)]
 pub struct RewriteInfo {

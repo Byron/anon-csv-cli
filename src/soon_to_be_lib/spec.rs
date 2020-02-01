@@ -1,6 +1,5 @@
 use failure::ResultExt;
-use std::borrow::Cow;
-use std::str::FromStr;
+use std::{borrow::Cow, str::FromStr};
 use strum::IntoEnumIterator;
 
 #[derive(Debug, EnumString, EnumIter, IntoStaticStr)]

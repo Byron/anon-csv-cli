@@ -1,10 +1,6 @@
 use crate::soon_to_be_lib::spec::Spec;
 use std::path::PathBuf;
 
-fn parse_spec(src: &str) -> Result<Spec, failure::Error> {
-    src.parse()
-}
-
 #[derive(Debug, StructOpt)]
 #[structopt(name = "anon-csv", about = "A CSV-file anonymizer")]
 pub struct Args {
@@ -26,6 +22,6 @@ pub struct Args {
     /// One or more rewrite specifications. They look like '<column>:<type>', where <column> is
     /// a zero-based column indexed, separated from the <type> being the type of data to fake.
     /// Run this command with --all-specs and all required arguments to learn about all possible values.
-    #[structopt(parse(try_from_str = "parse_spec"))]
+    #[structopt(parse(try_from_str))]
     pub specs: Vec<Spec>,
 }

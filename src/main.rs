@@ -1,24 +1,18 @@
 #[macro_use]
 extern crate failure;
-extern crate failure_tools;
 #[macro_use]
 extern crate structopt;
-extern crate fake;
-extern crate strum;
 #[macro_use]
 extern crate strum_macros;
 
 use failure::{Error, ResultExt};
 use failure_tools::ok_or_exit;
-use std::{fs::File, io::stdout, io::Read};
+use soon_to_be_lib::spec::FakerKind;
+use std::{fs::File, io::stdin, io::stdout, io::Read, path::Path};
 use structopt::StructOpt;
 
 mod options;
 mod soon_to_be_lib;
-
-use soon_to_be_lib::spec::FakerKind;
-use std::io::stdin;
-use std::path::Path;
 
 fn run() -> Result<(), Error> {
     let opt: options::Args = options::Args::from_args();
