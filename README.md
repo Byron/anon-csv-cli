@@ -8,6 +8,13 @@ Using Cargo (which you can install via https://rustup.rs):
 cargo install anon-csv-cli
 ```
 
+Or via download - the binary will fit your platform:
+
+```sh
+curl -LSfs https://japaric.github.io/trust/install.sh | \
+    sh -s -- --git byron/anon-csv-cli --crate anon-csv
+```
+
 ## Usage
 
 ```
