@@ -1,6 +1,6 @@
 [package]
 name = "anon-csv-cli"
-version = "1.0.3"
+version = "1.0.4-alpha.0"
 authors = ["Sebastian Thiel <byronimo@gmail.com>"]
 publish = true
 edition = "2018"
