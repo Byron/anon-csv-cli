@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Byron/anon-csv-cli.svg?branch=master)](https://travis-ci.org/Byron/anon-csv-cli)
+
 A tool to anonymise CSV files, providing various options to substitute real data with plausable fake data.
 
 ## Installation
