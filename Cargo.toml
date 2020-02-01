@@ -1,10 +1,10 @@
 [package]
 name = "anon-csv-cli"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Sebastian Thiel <byronimo@gmail.com>"]
 publish = true
 edition = "2018"
-documentation = "https://github.com/Byron-TW/anon-csv-cli"
+include = ["src/**/*", "Cargo.toml"]
 repository = "https://github.com/Byron-TW/anon-csv-cli"
 description = "A tool to anonymise CSV files, providing various options to substitute real data with plausable fake data."
 categories = ["text-processing", "science"]
