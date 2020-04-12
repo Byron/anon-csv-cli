@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/Byron/anon-csv-cli.svg?branch=master)](https://travis-ci.org/Byron/anon-csv-cli)
+![Rust](https://github.com/Byron/anon-csv-cli/workflows/Rust/badge.svg)
+[![Crates.io](https://img.shields.io/crates/v/anon-csv-cli.svg)](https://crates.io/crates/anon-csv-cli)
+
 
 A tool to anonymise CSV files, providing various options to substitute real data with plausable fake data.
 
