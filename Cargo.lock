@@ -2,7 +2,7 @@
 # It is not intended for manual editing.
 [[package]]
 name = "anon-csv-cli"
-version = "1.0.4-alpha.0"
+version = "1.0.4"
 dependencies = [
  "csv",
  "failure",

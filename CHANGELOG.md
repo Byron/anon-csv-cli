@@ -1,5 +1,5 @@
 ### What's new…
 
-#### …in version 1.4.0
+#### …in version 1.0.4
 
 * update dependencies
